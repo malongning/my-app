@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>接口请求</title>
+    <style>
+        .box {
+            width: 500px;
+            height: auto;
+            /* margin: 0 auto; */
+            margin-left: 20px;
+        }
+
+        .box-input {
+            width: 400px;
+            height: 20px;
+            padding: 4px 6px;
+            border-radius: 4px 0 0 4px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        .button {
+            margin: 5px 0 0 38px;
+            padding: 4px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #e6e6e6;
+            outline: none;
+            color: #333;
+            cursor: pointer;
+            background-color: #f5f5f5;
+        }
+
+        .button:hover {
+            color: #333;
+            background-color: #e6e6e6;
+        }
+
+        .pre {
+            display: block;
+
+        }
+    </style>
+</head>
+
+<body>
+    <h2>发送请求示例</h2>
+    <div class="box">
+        <label>网址</label>
+        <input class="box-input"  type="text" placeholder="请输入网址">
+        <br>
+        <button class="button" id="btn" onclick="get();">发送</button>
+		<button class="button" id="btnjd" onclick="getjd();">刷新</button>
+    </div>
+    <div class="back">
+        <h3>返回</h3>
+        <pre class="pre"></pre>
+    </div>
+</body>
+<script src="jquery-1.10.2.min.js"></script>
+<script>
+    $('.back').hide();
+    $('.box-input').val('http://localhost:51018/api/values/GetDataSetPage');
+    function get() {
+        var url = $('.box-input').val();
+        if(url == ''){
+            alert("请输入网址");
+            return false;
+        }
+		$('#btn').attr('disabled',"true");
+		
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: {
+	"pageSize": 50000,
+	"pageNum": 9
+},
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $('.back').show();
+                $('.pre').html(JSON.stringify(data));
+				$('#btn').attr('disabled',false); 
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+	
+	function getjd() {
+        var url = "http://192.168.56.101/api/values/GetDataSetJd";
+        if(url == ''){
+            alert("请输入网址");
+            return false;
+        }
+		$('#btnjd').attr('disabled',"true");
+		
+        $.ajax({
+            type: "GET",
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $('.back').show();
+                $('.pre').html(JSON.stringify(data));
+				$('#btnjd').attr('disabled',false); 
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+</script>
+
+</html>
